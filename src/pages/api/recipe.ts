@@ -6,15 +6,19 @@ const openai = new OpenAI({
   apiKey: env.OPENAI_API_KEY,
 });
 
+export type RecipeResponse = {
+  list?: string[];
+  error?: string;
+};
+
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse,
+  res: NextApiResponse<RecipeResponse>,
 ) {
   try {
-    // TODO maybe check if is string
     const ingredients = req.query.items;
 
-    if (typeof ingredients !== "string" || ingredients === "") {
+    if (typeof ingredients !== "string" || ingredients.trim() === "") {
       res.status(400).json({ error: "Oops bad request" });
       return;
     }

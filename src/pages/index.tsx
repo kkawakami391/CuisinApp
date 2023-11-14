@@ -1,24 +1,26 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import Head from "next/head";
+import { type RecipeResponse } from "~/pages/api/recipe";
 
 export default function Home() {
   const [input, setInput] = useState("");
 
-  const { data, isLoading, isError, refetch, error } = useQuery<{
-    list: string[];
-    error?: string;
-  }>({
-    queryKey: ["recipes"],
-    queryFn: async () => {
-      const response = await fetch(`/api/recipe?items=${input}`);
-      if (!response.ok) {
-        throw new Error(response.statusText);
-      }
-      return response.json();
+  const { data, isLoading, isError, refetch, error } = useQuery<RecipeResponse>(
+    {
+      queryKey: ["recipes"],
+      queryFn: async () => {
+        const response = await fetch(`/api/recipe?items=${input}`);
+        if (!response.ok) {
+          const error = (await response.json()) as RecipeResponse;
+          throw new Error(error.error);
+        }
+        return (await response.json()) as RecipeResponse;
+      },
+      enabled: false,
+      retry: false,
     },
-    enabled: false,
-  });
+  );
 
   return (
     <>
