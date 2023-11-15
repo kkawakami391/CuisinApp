@@ -6,13 +6,13 @@ import { type RecipeResponse } from "~/pages/api/recipe";
 export default function Home() {
   const [input, setInput] = useState("");
 
-  const { data, isLoading, isError, refetch, error } = useQuery<string[]>(
+  const { data, isLoading, isError, refetch, error } = useQuery<RecipeResponse>(
     {
       queryKey: ["recipes"],
       queryFn: async () => {
         const response = await fetch(`/api/recipe?items=${input}`);
         if (!response.ok) {
-          const error = (await response.json());
+          const error = (await response.json()) as RecipeResponse;
           throw new Error(error.error);
         }
         return (await response.json()) as RecipeResponse;
