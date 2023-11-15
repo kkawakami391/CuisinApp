@@ -12,7 +12,7 @@ export default function Home() {
       queryFn: async () => {
         const response = await fetch(`/api/recipe?items=${input}`);
         if (!response.ok) {
-          const error = (await response.json()) as RecipeResponse;
+          const error = (await response.json());
           throw new Error(error.error);
         }
         return (await response.json()) as RecipeResponse;
