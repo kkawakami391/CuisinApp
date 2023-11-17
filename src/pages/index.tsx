@@ -1,26 +1,28 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import Head from "next/head";
-import { type RecipeResponse } from "~/pages/api/recipe";
+import { CUISINE_TYPE, MEAL_TYPE } from "~/pages/types/edamam";
+import { type RecipeResponse } from "~/pages/api/edamam";
 
 export default function Home() {
-  const [input, setInput] = useState("");
+  const [mealType, setMealType] = useState("");
+  const [cuisineType, setCuisineType] = useState("");
 
-  const { data, isLoading, isError, refetch, error } = useQuery<RecipeResponse>(
-    {
-      queryKey: ["recipes"],
-      queryFn: async () => {
-        const response = await fetch(`/api/recipe?items=${input}`);
-        if (!response.ok) {
-          const error = (await response.json()) as RecipeResponse;
-          throw new Error(error.error);
-        }
-        return (await response.json()) as RecipeResponse;
-      },
-      enabled: false,
-      retry: false,
+  const { data, isLoading, isError, refetch, error } = useQuery({
+    queryKey: ["recipes"],
+    queryFn: async () => {
+      const response = await fetch(
+        `/api/edamam?mealType=${mealType}&cuisineType=${cuisineType}`,
+      );
+      if (!response.ok) {
+        // const error = (await response.json()) as unknown;
+        throw new Error(response.statusText);
+      }
+      return (await response.json()) as RecipeResponse;
     },
-  );
+    enabled: false,
+    retry: false,
+  });
 
   return (
     <>
@@ -37,10 +39,28 @@ export default function Home() {
             await refetch();
           }}
         >
-          <input
-            className="border-blue-gray-200 text-blue-gray-700 placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 disabled:bg-blue-gray-50 peer h-full w-full rounded-[7px] border bg-transparent px-3 py-2.5 font-sans text-sm font-normal text-white outline outline-0 transition-all placeholder-shown:border focus:border-2 focus:border-pink-500 focus:border-t-transparent focus:outline-0 disabled:border-0"
-            onChange={(e) => setInput(e.target.value)}
-          />
+          <select onChange={(e) => setMealType(e.target.value)}>
+            <option selected disabled>
+              Select Meal Type
+            </option>
+            {MEAL_TYPE.map((t, i) => (
+              <option key={i} value={t}>
+                {t}
+              </option>
+            ))}
+          </select>
+
+          <select onChange={(e) => setCuisineType(e.target.value)}>
+            <option selected disabled>
+              Select Cuisine Type
+            </option>
+            {CUISINE_TYPE.map((t, i) => (
+              <option key={i} value={t}>
+                {t}
+              </option>
+            ))}
+          </select>
+
           <button
             className="rounded-lg bg-pink-500 px-6 py-3 font-sans text-xs font-bold uppercase text-white shadow-md shadow-pink-500/20 transition-all hover:shadow-lg hover:shadow-pink-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
             disabled={isLoading}
@@ -53,7 +73,7 @@ export default function Home() {
           <div className="h-8 w-8 animate-spin rounded-full border-4 border-solid border-white border-t-transparent" />
         )}
 
-        {data && (
+        {/* {data && (
           <ul className="overflow-hidden rounded border border-gray-200 shadow-md">
             {data.list?.map((item, i) => (
               <li
@@ -64,7 +84,7 @@ export default function Home() {
               </li>
             ))}
           </ul>
-        )}
+        )} */}
 
         {isError && (
           <p className="border-b border-gray-200 bg-white px-4 py-2 transition-all duration-300 ease-in-out last:border-none hover:bg-sky-100 hover:text-sky-900">
