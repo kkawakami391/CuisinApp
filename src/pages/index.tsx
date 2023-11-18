@@ -1,12 +1,17 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import Head from "next/head";
-import { CUISINE_TYPE, MEAL_TYPE } from "~/pages/types/edamam";
+import {
+  CUISINE_TYPE,
+  type CuisineType,
+  MEAL_TYPE,
+  type MealType,
+} from "~/pages/types/edamam";
 import { type RecipeResponse } from "~/pages/api/edamam";
 
 export default function Home() {
-  const [mealType, setMealType] = useState("");
-  const [cuisineType, setCuisineType] = useState("");
+  const [mealType, setMealType] = useState<MealType>();
+  const [cuisineType, setCuisineType] = useState<CuisineType>();
 
   const { data, isLoading, isError, refetch, error } = useQuery({
     queryKey: ["recipes"],
@@ -39,7 +44,7 @@ export default function Home() {
             await refetch();
           }}
         >
-          <select onChange={(e) => setMealType(e.target.value)}>
+          <select onChange={(e) => setMealType(e.target.value as MealType)}>
             <option selected disabled>
               Select Meal Type
             </option>
@@ -50,7 +55,9 @@ export default function Home() {
             ))}
           </select>
 
-          <select onChange={(e) => setCuisineType(e.target.value)}>
+          <select
+            onChange={(e) => setCuisineType(e.target.value as CuisineType)}
+          >
             <option selected disabled>
               Select Cuisine Type
             </option>
