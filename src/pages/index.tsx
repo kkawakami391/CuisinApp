@@ -44,10 +44,12 @@ export default function Home() {
             await refetch();
           }}
         >
-          <select onChange={(e) => setMealType(e.target.value as MealType)}>
-            <option selected disabled>
-              Select Meal Type
-            </option>
+          <select
+            className="w-40 rounded-lg text-center"
+            defaultValue={"Select Meal Type"}
+            onChange={(e) => setMealType(e.target.value as MealType)}
+          >
+            <option disabled>Select Meal Type</option>
             {MEAL_TYPE.map((t, i) => (
               <option key={i} value={t}>
                 {t}
@@ -56,11 +58,11 @@ export default function Home() {
           </select>
 
           <select
+            className="w-40 rounded-lg text-center"
+            defaultValue={"Select Cuisine Type"}
             onChange={(e) => setCuisineType(e.target.value as CuisineType)}
           >
-            <option selected disabled>
-              Select Cuisine Type
-            </option>
+            <option disabled>Select Cuisine Type</option>
             {CUISINE_TYPE.map((t, i) => (
               <option key={i} value={t}>
                 {t}
@@ -80,18 +82,25 @@ export default function Home() {
           <div className="h-8 w-8 animate-spin rounded-full border-4 border-solid border-white border-t-transparent" />
         )}
 
-        {/* {data && (
-          <ul className="overflow-hidden rounded border border-gray-200 shadow-md">
+        {data && (
+          <ul className="mb-4 overflow-hidden rounded border border-gray-200 shadow-md">
             {data.list?.map((item, i) => (
               <li
                 key={i}
-                className="border-b border-gray-200 bg-white px-4 py-2 transition-all duration-300 ease-in-out last:border-none hover:bg-sky-100 hover:text-sky-900"
+                className="border-b border-gray-200 bg-white px-4 py-2 text-xl transition-all duration-300 ease-in-out last:border-none hover:bg-sky-100 hover:text-sky-900"
               >
-                {item}
+                {item.recipe.label}
+                <ul>
+                  {item.recipe.ingredients.map((ingredient, i) => (
+                    <li key={i} className="ml-8 list-disc text-base">
+                      {ingredient.text}
+                    </li>
+                  ))}
+                </ul>
               </li>
             ))}
           </ul>
-        )} */}
+        )}
 
         {isError && (
           <p className="border-b border-gray-200 bg-white px-4 py-2 transition-all duration-300 ease-in-out last:border-none hover:bg-sky-100 hover:text-sky-900">

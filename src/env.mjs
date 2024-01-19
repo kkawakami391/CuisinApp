@@ -24,7 +24,7 @@ export const env = createEnv({
     // Add ` on ID and SECRET if you want to make sure they're not empty
     // DISCORD_CLIENT_ID: z.string(),
     // DISCORD_CLIENT_SECRET: z.string(),
-    OPENAI_API_KEY: z.string(),
+    // OPENAI_API_KEY: z.string(),
     EDAMAM_APP_ID: z.string(),
     EDAMAM_APP_KEY: z.string(),
   },
@@ -49,7 +49,7 @@ export const env = createEnv({
     // DISCORD_CLIENT_ID: process.env.DISCORD_CLIENT_ID,
     // DISCORD_CLIENT_SECRET: process.env.DISCORD_CLIENT_SECRET,
     // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
-    OPENAI_API_KEY: process.env.OPENAI_API_KEY,
+    // OPENAI_API_KEY: process.env.OPENAI_API_KEY,
     EDAMAM_APP_ID: process.env.EDAMAM_APP_ID,
     EDAMAM_APP_KEY: process.env.EDAMAM_APP_KEY,
   },
